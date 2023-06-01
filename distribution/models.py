@@ -18,10 +18,10 @@ class Client(models.Model):
     import pytz
     TIMEZONES = tuple(zip(pytz.all_timezones, pytz.all_timezones))
 
-    phone_number = models.CharField(max_length=11)
-    MNC = models.PositiveIntegerField()
-    TAG = models.SlugField(db_index=True, max_length=15)
-    timezone = models.CharField(max_length=32, choices=TIMEZONES) 
+    phone_number = models.CharField(max_length=11, verbose_name='Номер телефона')
+    MNC = models.PositiveIntegerField(verbose_name='Код страны')
+    TAG = models.SlugField(db_index=True, max_length=15, verbose_name='ТЕГ')
+    timezone = models.CharField(max_length=32, choices=TIMEZONES, verbose_name='Часовой пояс') 
 
     def __str__(self) -> str:
         return self.phone_number
@@ -37,13 +37,13 @@ class Message(models.Model):
         ('not sent', 'not sent'),
     ]
 
-    timestamp_create = models.DateTimeField(auto_now_add=True)
+    timestamp_create = models.DateTimeField(auto_now_add=True, null=True)
     status = models.CharField(max_length=8, choices=STATUS, default='not sent')
-    distribution = models.ForeignKey(to=Distribution, null=True, on_delete=models.SET_NULL)
-    client = models.ForeignKey(to=Client, null=True, on_delete=models.SET_NULL)
+    distribution = models.ForeignKey(to=Distribution, null=True, on_delete=models.SET_NULL, verbose_name='Рассылка')
+    client = models.ForeignKey(to=Client, null=True, on_delete=models.SET_NULL, verbose_name='Номер клиента')
 
     def __str__(self) -> str:
-        return f'Message {self.id} {self.status}'
+        return f'Message {self.id}, {self.status}'
     
     class Meta:
         verbose_name = 'Сообщение'

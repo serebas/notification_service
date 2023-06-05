@@ -17,7 +17,7 @@ def client_one(db):
     return Client.objects.create(
         phone_number='79175182687',
         MNC='7',
-        TAG='andrew5',
+        TAG='customer',
         timezone='Africa/Abidjan'
     )
 

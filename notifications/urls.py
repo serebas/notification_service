@@ -18,14 +18,10 @@ from django.contrib import admin
 
 from rest_framework import permissions
 from django.urls import path, re_path
-from django.urls import include
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from distribution.views import *
-from rest_framework import routers
+from distribution.views import ClientViewSet, DistributionViewSet, StatisticViewSet
 
-# router = routers.SimpleRouter()
-# router.register('client', ClientViewSet)
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -43,16 +39,22 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('client/', ClientViewSet.as_view({'post': 'create'})),
-    path('client/<int:pk>/', ClientViewSet.as_view({'delete': 'destroy', 'put': 'update'})),
+    #url для создание нового клиента
+    path('api/client/', ClientViewSet.as_view({'post': 'create'})),
+    #url для удаления клиента и обновления его атрибутов
+    path('api/client/<int:pk>/', ClientViewSet.as_view({'delete': 'destroy', 'put': 'update'})),
 
-    path('distribution/', DistributionViewSet.as_view({'post': 'create'})),
-    path('distribution/<int:pk>/', DistributionViewSet.as_view({'delete': 'destroy', 'put': 'update', 'get': 'retrieve'})),
+    #url для создания новой рассылки
+    path('api/distribution/', DistributionViewSet.as_view({'post': 'create'})),
+    #url для удаления, обновления атрибутов рассылки и получения детальной статистики по ней
+    path('api/distribution/<int:pk>/', DistributionViewSet.as_view({'delete': 'destroy', 'put': 'update', 'get': 'retrieve'})),
 
-    path('statistic/', StatisticViewSet.as_view({'get': 'list'})),
+    #url для получения общей статистики по рассылкам
+    path('api/statistic/', StatisticViewSet.as_view({'get': 'list'})),
     
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    #url для просмотра документации по API (5-й пункт дополнительных заданий)
+    re_path(r'^swagger/docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 

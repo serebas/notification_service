@@ -131,5 +131,14 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+#настройки для работы celery
 CELERY_BROKER_URL = "redis://localhost:6379"
 CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+#настройки для работы отправки писем на email
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "your@yandex.ru"
+EMAIL_HOST_PASSWORD = "password"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
